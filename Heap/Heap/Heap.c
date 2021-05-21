@@ -1,8 +1,9 @@
 #include "Heap.h"
 
-void HeapInit(Heap* pHeap)
+void HeapInit(Heap* pHeap, PriorityComp pc)
 {
 	pHeap->numOfData = 0;
+	pHeap->comp = pc;
 }
 
 int HIsEmpty(Heap* pHeap)
@@ -42,16 +43,19 @@ int GetHiPriChildIdx(Heap* pHeap, int idx)
 		int lIdx = GetLChildIdx(idx);
 		int rIdx = GetRChildIdx(idx);
 
-		if (pHeap->heapArr[lIdx].pr > pHeap->heapArr[rIdx].pr)
-			return rIdx;
-		else
+		
+		if (pHeap->comp(pHeap->heapArr[lIdx], pHeap->heapArr[rIdx]) < 0)
 			return lIdx;
+		else
+			return rIdx;
+		
+		
 	}
 }
 
-void HInsert(Heap* pHeap, HData data, Priority pr)
+void HInsert(Heap* pHeap, HData data)
 {
-	HeapElem heapData = { pr, data };
+	HData heapData = data;
 	int insertIdx;
 	int parentIdx;
 
@@ -60,7 +64,7 @@ void HInsert(Heap* pHeap, HData data, Priority pr)
 	{
 		parentIdx = GetParentIdx(insertIdx);
 
-		if (pHeap->heapArr[parentIdx].pr < pr)
+		if (pHeap->comp(pHeap->heapArr[parentIdx], heapData) < 0)
 			break;
 
 		pHeap->heapArr[insertIdx] = pHeap->heapArr[parentIdx];
@@ -73,15 +77,15 @@ void HInsert(Heap* pHeap, HData data, Priority pr)
 
 HData HDelete(Heap* pHeap)
 {
-	HData retData = pHeap->heapArr[1].data;
+	HData retData = pHeap->heapArr[1];
 	
 	int childIdx = 1;
 	int parentIdx = 1;
-	HeapElem tempData = pHeap->heapArr[pHeap->numOfData];
+	HData tempData = pHeap->heapArr[pHeap->numOfData];
 
 	while (childIdx = GetHiPriChildIdx(pHeap, parentIdx))
 	{
-		if (tempData.pr <= pHeap->heapArr[childIdx].pr)
+		if (pHeap->comp(tempData, pHeap->heapArr[childIdx]) <= 0)
 			break;
 
 		pHeap->heapArr[parentIdx] = pHeap->heapArr[childIdx];

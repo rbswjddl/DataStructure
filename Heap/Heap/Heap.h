@@ -6,21 +6,17 @@
 
 typedef char HData;
 typedef int Priority;
-
-typedef struct
-{
-	Priority pr;
-	HData data;
-}HeapElem;
+typedef int PriorityComp(HData d1, HData d2);
 
 typedef struct Heap
 {
+	PriorityComp* comp;
 	int numOfData;
-	HeapElem heapArr[HEAP_LEN];
+	HData heapArr[HEAP_LEN];
 }Heap;
 
-void HeapInit(Heap* pHeap);
+void HeapInit(Heap* pHeap, PriorityComp pc);
 int HIsEmpty(Heap* pHeap);
 
-void HInsert(Heap* pHeap, HData data, Priority pr);
+void HInsert(Heap* pHeap, HData data);
 HData HDelete(Heap* pHeap);
