@@ -24,3 +24,9 @@ typedef void VisitFuncPtr(BTData data);
 void PreorderTraverse(BTreeNode* bt, VisitFuncPtr action);
 void InorderTraverse(BTreeNode* bt, VisitFuncPtr action);
 void PostorderTraverse(BTreeNode* bt, VisitFuncPtr action);
+
+void ChangeLeftSubTree(BTreeNode* main, BTreeNode* sub);
+void ChangeRightSubTree(BTreeNode* main, BTreeNode* sub);
+
+BTreeNode* RemoveLeftSubTree(BTreeNode* bt);
+BTreeNode* RemoveRightSubTree(BTreeNode* bt);
